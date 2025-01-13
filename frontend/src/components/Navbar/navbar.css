@@ -14,3 +14,45 @@
     color: #49557e;
     font-size: 18px;
 }
+.navbar li{
+    cursor: pointer;
+}
+.navbar-right{
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+.navbar button{
+    background: transparent;
+    font-size: 16px;
+    color: #49557e;
+    border: 1px solid rgb(51, 255, 24);
+    padding: 10px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.navbar button:hover{
+    transition: 150ms;
+    background-color: rgb(51, 255, 24);
+    color: white;
+}
+
+.navbar .active{
+    padding-bottom: 2px;
+    border-bottom: 2px solid rgb(51, 255, 24);
+}
+
+.navbar-basket-icon{
+    position: relative;
+}
+
+.navbar-basket-icon .dot{
+    position: absolute;
+    min-width: 10px;
+    min-height: 10px;
+    background-color: rgb(51, 255, 24);
+    border-radius: 5px;
+    top: -8px;
+    right: -8px;
+}
