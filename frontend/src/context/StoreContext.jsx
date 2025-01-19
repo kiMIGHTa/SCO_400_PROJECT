@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { food_list } from "../../../downloads/assets/frontend_assets/assets";
 
 export const StoreContext = createContext(null)
@@ -19,6 +19,10 @@ const StoreContextProvider = (props)=>{
     const removeFromCart = (itemId)=>{
         setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))
     }
+
+    useEffect(()=>{
+        console.log(cartItems);
+    },[cartItems])
 
 
     const contextValue = {
