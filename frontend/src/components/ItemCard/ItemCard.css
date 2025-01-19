@@ -1,0 +1,74 @@
+.item-card{
+    width: 100%;
+    margin: auto;
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px #0000158a;
+    transition: 0.4s;
+    animation: fadeIn 1s;
+}
+
+.item-image{
+    width: 100%;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.item-card-info{
+    padding: 20px;
+}
+.item-card-name-rating{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.item-card-name-rating p{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.item-card-name-rating img{
+    width: 70px;
+}
+
+.item-card-descriptrion{
+    color: #747474;
+    font-size: 12px;
+}
+
+.item-card-price{
+    color: orangered;
+    font-size: 22px;
+    font-weight: 500;
+    margin: 10px 0px;
+}
+
+.item-image-container{
+    position: relative;
+}
+
+.item-image-container .add-button{
+    width: 35px;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.item-counter{
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px;
+    border-radius: 50px;
+    background-color: white;
+}
+
+.item-counter img{
+    width: 30px;
+    cursor: pointer;
+}
