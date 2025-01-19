@@ -1,7 +1,7 @@
 .header{
     height: 34vw;
     margin: 30px auto;
-    background:url('/header_img.png');
+    background:url('/header_img.png') no-repeat;
     background-size: contain;
     position: relative;
 }
@@ -30,15 +30,17 @@
 
 .header-content button{
     border: none;
-    color: #747474;
+    color: #49557e;
     font-weight: 500;
     padding: 1vw 2.4vw;
     background-color: white;
     font-size: max(1vw, 13px);
     border-radius: 50px;
+    cursor: pointer;
 }
 
 .header-content button:hover{
     transition: 150ms;
     background-color: rgb(51, 255, 24);
+    color: white;
 }
