@@ -1,9 +1,24 @@
-.navbar{
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
+    transition: transform 0.4s ease-in-out;
     padding: 20px 0px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+  }
+  
+  .navbar.hidden {
+    transform: translateY(-100%); /* Moves the navbar out of view */
+  }
+  
+  .navbar.visible {
+    transform: translateY(0); /* Brings the navbar into view */
+  }
 .navbar .logo{
     width: 150px;
 }
