@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './index.css'
@@ -7,16 +7,37 @@ import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/home.jsx'
 import Cart from './pages/Cart/cart.jsx'
 import placeOrder from './pages/PlaceOrder/placeOrder.jsx'
-function App() {  
+import Footer from './components/Footer/Footer.jsx'
+import LoginPopUp from './components/LoginPopUp/LoginPopUp.jsx'
+
+function App() {
+
+  const [showLogin, setShowLogin] = useState(false)
+
+  useEffect(() => {
+    if (showLogin) {
+      document.body.style.overflow = "hidden"; // Disable scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Enable scrolling
+    }
+    return () => (document.body.style.overflow = "auto"); // Clean up on unmount
+  }, [showLogin]);
+
+
   return (
-    <div className='app'>
-    <Navbar />
-    <Routes>
-      <Route path='/' element={<Home/>} />
-      <Route path='/cart' element={<Cart/>} />
-      <Route path='/placeOrder' element={<placeOrder/>} />
-    </Routes>
-    </div>
+    <>
+    {showLogin?<LoginPopUp setShowLogin={setShowLogin}/>:<></>}
+      <div className='app'>
+        <Navbar setShowLogin={setShowLogin}/>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/placeOrder' element={<placeOrder />} />
+        </Routes>
+      </div>
+      <Footer />
+    </>
+
   )
 }
 
