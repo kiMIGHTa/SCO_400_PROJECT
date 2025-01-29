@@ -32,7 +32,7 @@ const Navbar = ({setShowLogin}) => {
 
   return (
     <div className={`navbar ${isNavbarVisible ? "visible" : "hidden"}`}>
-      <img src={assets.logo} alt="logo" className='logo'/>
+      <Link to='/'><img src={assets.logo} alt="logo" className='logo'/></Link>
       <ul className="navbar-list">
         <Link to='/' onClick={()=> setNavSelect("home")} className={navSelect==="home"?"active":""}>home</Link>
         <a href='#explore-page' onClick={()=> setNavSelect("menu")} className={navSelect==="menu"?"active":""}>menu</a>
@@ -42,7 +42,7 @@ const Navbar = ({setShowLogin}) => {
       <div className='navbar-right'>
         <img src={assets.search_icon} alt='Search'/>
         <div className='navbar-basket-icon'>
-          <img src={assets.basket_icon} alt='Basket'/>
+          <Link to='/cart'><img src={assets.basket_icon} alt='Basket'/></Link>
           <div className="dot"></div>
         </div>
         <button onClick={()=>setShowLogin(true)}>sign in</button>
