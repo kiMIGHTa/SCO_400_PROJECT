@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import './navbar.css'
 import { assets } from '../../../../downloads/assets/frontend_assets/assets'
 import { Link } from 'react-router-dom'
+import { StoreContext } from '../../context/StoreContext'
 
 
 const Navbar = ({setShowLogin}) => {
@@ -9,6 +10,8 @@ const Navbar = ({setShowLogin}) => {
   const [navSelect, setNavSelect] = useState("home")
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  const { getTotalCartAmount} = useContext(StoreContext)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +46,7 @@ const Navbar = ({setShowLogin}) => {
         <img src={assets.search_icon} alt='Search'/>
         <div className='navbar-basket-icon'>
           <Link to='/cart'><img src={assets.basket_icon} alt='Basket'/></Link>
-          <div className="dot"></div>
+          <div className={getTotalCartAmount()===0?'':'dot'}></div>
         </div>
         <button onClick={()=>setShowLogin(true)}>sign in</button>
       </div>
