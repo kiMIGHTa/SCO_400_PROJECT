@@ -6,7 +6,7 @@ import Navbar from './components/Navbar/navbar.jsx'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/home.jsx'
 import Cart from './pages/Cart/cart.jsx'
-import placeOrder from './pages/PlaceOrder/placeOrder.jsx'
+import PlaceOrder from './pages/PlaceOrder/placeOrder.jsx'
 import Footer from './components/Footer/Footer.jsx'
 import LoginPopUp from './components/LoginPopUp/LoginPopUp.jsx'
 
@@ -26,13 +26,13 @@ function App() {
 
   return (
     <>
-    {showLogin?<LoginPopUp setShowLogin={setShowLogin}/>:<></>}
+      {showLogin ? <LoginPopUp setShowLogin={setShowLogin} /> : <></>}
       <div className='app'>
-        <Navbar setShowLogin={setShowLogin}/>
+        <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/cart' element={<Cart />} />
-          <Route path='/placeOrder' element={<placeOrder />} />
+          <Route path='/placeOrder' element={<PlaceOrder />} />
         </Routes>
       </div>
       <Footer />
