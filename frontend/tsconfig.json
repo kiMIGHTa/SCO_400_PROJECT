@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"]
+      },
+      "allowJs": true,  // ✅ Allows JavaScript files
+      "skipLibCheck": true,  // ✅ Skips unnecessary type checks
+      "noEmit": true  // ✅ Prevents TypeScript from trying to compile anything
+    },
+    "include": ["src"]  // ✅ Ensures TypeScript "sees" your JS files
+  }
+  
