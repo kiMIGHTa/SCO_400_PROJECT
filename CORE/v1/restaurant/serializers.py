@@ -8,7 +8,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
     """Serializer for Restaurant"""
     class Meta:
         model = Restaurant
-        fields = ['id', 'name', 'owner', 'created_at']
+        fields = ['id', 'name', 'image', 'description', 'rating', 'owner', 'created_at']
         read_only_fields = ['id', 'owner', 'created_at']
 
     def create(self, validated_data):
