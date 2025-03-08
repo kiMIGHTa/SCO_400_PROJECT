@@ -9,6 +9,8 @@ import Cart from './pages/Cart/cart.jsx'
 import PlaceOrder from './pages/PlaceOrder/placeOrder.jsx'
 import Footer from './components/Footer/Footer.jsx'
 import LoginPopUp from './components/LoginPopUp/LoginPopUp.jsx'
+import Restaurant from './pages/Restaurant/restaurant'
+import RestaurantMenu from './pages/RestaurantMenu/RestaurantMenu'
 
 function App() {
 
@@ -33,6 +35,8 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/placeOrder' element={<PlaceOrder />} />
+          <Route path="/restaurants" element={<Restaurant />} />
+          <Route path="/restaurants/:restaurantId" element={<RestaurantMenu />} />
         </Routes>
       </div>
       <Footer />
