@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from cart.models import Cart
 
-
-# Create your models here.
-
 User = get_user_model()
 
 class Order(models.Model):
@@ -23,7 +20,9 @@ class Order(models.Model):
         self.status = "delivered"
         self.save()
         if self.cart:
-            self.cart.clear_cart()  # Remove items from cart
+            self.cart.items.all().delete()  # Clear cart items after delivery
+            self.cart.total_price = 0.00
+            self.cart.save()
 
     def __str__(self):
         return f"Order {self.id} - {self.user.username} ({self.status})"

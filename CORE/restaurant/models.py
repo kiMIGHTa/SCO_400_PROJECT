@@ -6,6 +6,9 @@ from django.conf import settings
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, default="No description provided.")
+    image = models.ImageField(upload_to="restaurant_images/", blank=True, null=True)
+    rating = models.IntegerField(blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="owned_restaurant")  
     
     created_at = models.DateTimeField(auto_now_add=True)
