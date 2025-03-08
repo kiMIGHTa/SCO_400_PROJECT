@@ -1,13 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import './cart.css'
-import { food_list } from '../../../../downloads/assets/frontend_assets/assets'
+import { food_list } from '../../../downloads/assets/frontend_assets/assets'
 import { StoreContext } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom'
 const Cart = () => {
 
-  const { cartItems, food_list, removeFromCart, getTotalCartAmount } = useContext(StoreContext)
+  const { cartItems, handleRemoveFromCart, getTotalCartAmount, foodList } = useContext(StoreContext);
 
-  const navigate = useNavigate('')
+  const navigate = useNavigate();
+
+
   return (
     <div className='cart'>
       <div className="cart-items">
@@ -21,20 +23,20 @@ const Cart = () => {
         </div>
         <br />
         <hr />
-        {food_list.map((item, index) => {
-          if (cartItems[item._id] > 0) {
+        {foodList.map((item) => {
+          if (cartItems[item.id] > 0) {
             return (
-              <>
+              <React.Fragment key={item.id}>
                 <div className='cart-items-title cart-items-item'>
                   <img src={item.image} alt='' />
                   <p>{item.name}</p>
                   <p>Ksh {item.price}</p>
-                  <p>{cartItems[item._id]}</p>
-                  <p>Ksh {item.price * cartItems[item._id]}</p>
-                  <p className='cross' onClick={() => removeFromCart(item._id)}>x</p>
+                  <p>{cartItems[item.id]}</p>
+                  <p>Ksh {item.price * cartItems[item.id]}</p>
+                  <p className='cross' onClick={() => handleRemoveFromCart(item.id)}>x</p>
                 </div>
                 <hr />
-              </>
+                </React.Fragment>
             )
 
           }
@@ -51,15 +53,15 @@ const Cart = () => {
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>{getTotalCartAmount()===0?0:2}</p>
+              <p>{getTotalCartAmount() === 0 ? 0 : 2}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>{getTotalCartAmount()===0?0:getTotalCartAmount() + 2}</b>
+              <b>{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
             </div>
           </div>
-          <button onClick={()=> navigate('/placeOrder')}>PROCEED TO CHECKOUT</button>
+          <button onClick={() => navigate('/placeOrder')}>PROCEED TO CHECKOUT</button>
         </div>
         <div className="cart-promo">
           <div>
