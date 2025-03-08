@@ -8,6 +8,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', Hello.as_view(), name='hello API'),
     path('auth/', include("v1.auth.urls")),
-    path('restaurant/', include("v1.restaurant.urls")),
+    path('restaurants/', include("v1.restaurant.urls")),
+    path('order/', include("v1.order.urls")),
+    path('cart/', include("v1.cart.urls")),
     path('food/', include("v1.food.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
