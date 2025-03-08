@@ -1,6 +1,6 @@
 import React from 'react'
 import './Footer.css'
-import { assets } from '../../../../downloads/assets/frontend_assets/assets'
+import { assets } from '../../../downloads/assets/frontend_assets/assets'
 
 const Footer = () => {
     return (
@@ -19,17 +19,17 @@ const Footer = () => {
                 <div className="footer-content">
                     <h2>MPISHI</h2>
                     <ul>
-                    <li>Home</li>
-                    <li>About Us</li>
-                    <li>Delivery</li>
-                    <li>Privacy Policy</li>
+                        <li>Home</li>
+                        <li>About Us</li>
+                        <li>Delivery</li>
+                        <li>Privacy Policy</li>
                     </ul>
                 </div>
                 <div className="footer-content">
                     <h2>GET IN TOUCH</h2>
                     <ul>
-                    <li>+254712555555</li>
-                    <li>mpishi@gmail.com</li>
+                        <li>+254712555555</li>
+                        <li>mpishi@gmail.com</li>
                     </ul>
 
                 </div>

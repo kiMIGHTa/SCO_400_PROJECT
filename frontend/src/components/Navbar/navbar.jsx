@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import './navbar.css'
-import { assets } from '../../../../downloads/assets/frontend_assets/assets'
+import { assets } from '../../../downloads/assets/frontend_assets/assets'
 import { Link } from 'react-router-dom'
 import { StoreContext } from '../../context/StoreContext'
 import { FiMenu, FiX } from "react-icons/fi"; // Import icons
@@ -41,18 +41,8 @@ const Navbar = ({ setShowLogin }) => {
   }, [lastScrollY]);
 
   const handleLogout = async () => {
-    console.log("Logout button clicked"); // Debugging log
-    try {
-      await accountApis.logout();
-      console.log("Logout successful");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+    await accountApis.logout();
   };
-  
-  
-  
-
 
   return (
     <div className={`navbar ${isNavbarVisible ? "visible" : "hidden"}`}>
@@ -60,7 +50,7 @@ const Navbar = ({ setShowLogin }) => {
       <ul className="navbar-list">
         <Link to='/' onClick={() => setNavSelect("home")} className={navSelect === "home" ? "active" : ""}>home</Link>
         <a href='#explore-page' onClick={() => setNavSelect("menu")} className={navSelect === "menu" ? "active" : ""}>menu</a>
-        <a href='' onClick={() => setNavSelect("mobile app")} className={navSelect === "mobile app" ? "active" : ""}>mobile app</a>
+        <Link to='/restaurants' onClick={() => setNavSelect("restaurants")} className={navSelect === "restaurants" ? "active" : ""}>restaurants</Link>
         <a href='#footer' onClick={() => setNavSelect("contact us")} className={navSelect === "contact us" ? "active" : ""}>contact us</a>
       </ul>
       <div className='navbar-right'>
@@ -88,7 +78,7 @@ const Navbar = ({ setShowLogin }) => {
         </button>
         <button onClick={() => { navigate("/profile"); setIsSidebarOpen(false); }}>Profile</button>
         <button onClick={handleLogout}>Logout</button>
-        </div>
+      </div>
 
       {isSidebarOpen && <div className="overlay" onClick={() => setIsSidebarOpen(false)}></div>}
 

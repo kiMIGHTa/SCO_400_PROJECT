@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './LoginPopUp.css'
-import { assets } from '../../../../downloads/assets/frontend_assets/assets'
+import { assets } from '../../../downloads/assets/frontend_assets/assets'
 import accountApis from '../../apiUtils/account'
 import { useNavigate } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify';
@@ -28,7 +28,7 @@ const LoginPopUp = ({ setShowLogin }) => {
     try {
       const response = await accountApis.login(credentials);
       console.log("Login Successful:", response);
-      toast.success("Login successful!", {autoClose: 2000});
+      toast.success("Login successful!", { autoClose: 2000 });
       setTimeout(() => {
         setShowLogin(false);
         navigate("/");
@@ -37,7 +37,7 @@ const LoginPopUp = ({ setShowLogin }) => {
       toast.error(error || "Login failed. Please try again.");
     }
   };
-  
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -49,7 +49,7 @@ const LoginPopUp = ({ setShowLogin }) => {
       toast.error(error || "Registration failed. Please try again.");
     }
   };
-  
+
 
 
   return (
