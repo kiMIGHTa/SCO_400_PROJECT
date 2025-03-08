@@ -19,7 +19,7 @@ class AccountApis {
   async register(data) {
     return new Promise(async (resolve, reject) => {
       anonAxiosInstance
-        .post("auth/register/", data) 
+        .post("auth/register/", data)
         .then((response) => {
           resolve(response?.data);
         })
@@ -46,9 +46,28 @@ class AccountApis {
 
   async logout() {
     console.log("Logout function called"); // Debugging log
+
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) {
+      console.warn("No refresh token found, clearing session.");
+      this.clearSession();
+      return;
+    }
+
+    try {
+      await anonAxiosInstance.post("auth/logout/", { refresh: refreshToken });
+      console.log("Successfully logged out from backend.");
+    } catch (error) {
+      console.error("Logout request failed:", error);
+    }
+
+    this.clearSession(); // Clear tokens & redirect
+  }
+
+  clearSession() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    // window.location.href = "/login"; // Redirect to login
+    window.location.href = "/";
   }
 }
 

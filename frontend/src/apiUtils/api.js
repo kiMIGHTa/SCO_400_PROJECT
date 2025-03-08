@@ -14,6 +14,14 @@ export const axiosInstance = axios.create({
   baseURL: BASE_URL,
 });
 
+const handleLogout = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  if (window.location.pathname !== "/") {
+    window.location.href = "/";
+  }
+};
+
 // Request interceptor to add JWT token to headers
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -38,9 +46,18 @@ axiosInstance.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        console.warn("No refresh token found, logging out.");
+        handleLogout(); // Clear tokens and redirect
+        return Promise.reject(error);
+      }
+
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        const response = await accountApis.refreshToken({ refresh: refreshToken });
+        console.log("Refreshing token..."); // Debugging
+        const response = await accountApis.refreshToken({
+          refresh: refreshToken,
+        });
 
         const newAccessToken = response.data.access;
         const newRefreshToken = response.data.refresh;
@@ -54,9 +71,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        window.location.href = "/login"; // Redirect to login
+        handleLogout();
         return Promise.reject(refreshError);
       }
     }
