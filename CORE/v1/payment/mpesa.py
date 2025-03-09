@@ -7,7 +7,7 @@ import base64
 MPESA_ENVIRONMENT = os.getenv("MPESA_ENVIRONMENT", "sandbox")
 CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
 CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
-MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
+SHORTCODE = os.getenv("MPESA_SHORTCODE")
 MPESA_EXPRESS_SHORTCODE = os.getenv("MPESA_SHORTCODE")
 
 PASSKEY = os.getenv("MPESA_PASSKEY")  
@@ -93,7 +93,7 @@ class MpesaAPI:
         }
 
         payload = {
-            "BusinessShortCode": SHORTCODE,
+            "BusinessShortCode": MPESA_EXPRESS_SHORTCODE,
             "Password": password,
             "Timestamp": timestamp,
             "CheckoutRequestID": checkout_request_id,
