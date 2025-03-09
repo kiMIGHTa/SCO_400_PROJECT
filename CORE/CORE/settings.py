@@ -134,8 +134,7 @@ WSGI_APPLICATION = 'CORE.wsgi.application'
 # Replace the SQLite DATABASES configuration with PostgreSQL:
 DATABASES = {
     'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://kimaita:Y8QBVsAxD7GV6lk483xyjDD8j6hmjOvp@dpg-cv6uubvnoe9s73c30g4g-a/mpishi_prod',
+        default=os.getenv('DATABASE_URL'),
         conn_max_age=600
     )
 }
