@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'food',
     'cart',
     'order',
+    'payment',
 ]
 
 AUTH_USER_MODEL = "users.CustomUser"
