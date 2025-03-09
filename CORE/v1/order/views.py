@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -23,8 +23,9 @@ class CreateOrderView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         cart = get_object_or_404(Cart, user=self.request.user)
-        order = serializer.save(user=self.request.user, cart=cart, total_price=cart.get_total_price())
-        order.complete_order()  # Clears the cart after order creation
+        order = serializer.save(user=self.request.user,
+                                cart=cart, total_price=cart.get_total_price())
+        # order.complete_order()  # Clears the cart after order creation
 
 
 class OrderDetailView(generics.RetrieveAPIView):
@@ -46,5 +47,7 @@ class CompleteOrderView(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         order = self.get_object()
+        if order.status == "delivered":
+            return Response({"error": "Order is already completed."}, status=status.HTTP_400_BAD_REQUEST)
         order.complete_order()
         return Response({"message": "Order marked as delivered."})
