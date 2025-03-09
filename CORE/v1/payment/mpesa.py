@@ -7,7 +7,8 @@ import base64
 MPESA_ENVIRONMENT = os.getenv("MPESA_ENVIRONMENT", "sandbox")
 CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
 CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
-SHORTCODE = os.getenv("MPESA_SHORTCODE")
+MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
+MPESA_EXPRESS_SHORTCODE = os.getenv("MPESA_SHORTCODE")
 
 PASSKEY = os.getenv("MPESA_PASSKEY")  
 CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")  
@@ -39,7 +40,7 @@ class MpesaAPI:
     def generate_password():
         """Generate password for STK push request"""
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        password = base64.b64encode(f"{SHORTCODE}{PASSKEY}{timestamp}".encode()).decode()
+        password = base64.b64encode(f"{MPESA_EXPRESS_SHORTCODE}{PASSKEY}{timestamp}".encode()).decode()
         return password, timestamp
 
     @staticmethod
@@ -59,13 +60,13 @@ class MpesaAPI:
         }
 
         payload = {
-            "BusinessShortCode": SHORTCODE,
+            "BusinessShortCode": MPESA_EXPRESS_SHORTCODE,
             "Password": password,
             "Timestamp": timestamp,
             "TransactionType": "CustomerPayBillOnline",
             "Amount": amount,
             "PartyA": phone_number,
-            "PartyB": SHORTCODE,
+            "PartyB": MPESA_EXPRESS_SHORTCODE,
             "PhoneNumber": phone_number,
             "CallBackURL": CALLBACK_URL,
             "AccountReference": account_reference,
