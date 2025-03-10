@@ -52,19 +52,35 @@ def initiate_payment(request):
     try:
         data = json.loads(request.body)
         amount = data.get("amount", 1)
-        phone = data.get("phone", "254705912645")
+        phone_number = data.get("phone_number", 254769375587)
         order_id = data.get("order_id")
-        payment_type = data.get("type", "stk")  # Default to STK push
 
         if not order_id:
             return JsonResponse({"error": "Order ID is required"}, status=400)
 
-        if payment_type == "stk":
-            response = MpesaAPI.stk_push_request(amount, phone, order_id)
-        elif payment_type == "c2b":
-            response = MpesaAPI.simulate_c2b_transaction(amount, phone, order_id)
-        else:
-            return JsonResponse({"error": "Invalid payment type. Use 'stk' or 'c2b'"}, status=400)
+        # Initiate STK Push
+        response = MpesaAPI.stk_push_request(amount, phone_number)
+
+        return JsonResponse(response)
+
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON payload"}, status=400)
+
+@csrf_exempt
+def check_payment_status(request):
+    """API to check M-Pesa STK Push payment status."""
+    if request.method != "POST":
+        return JsonResponse({"error": "Only POST requests are allowed"}, status=405)
+
+    try:
+        data = json.loads(request.body)
+        checkout_request_id = data.get("checkout_request_id")
+
+        if not checkout_request_id:
+            return JsonResponse({"error": "checkout_request_id is required"}, status=400)
+
+        # Query STK Push payment status
+        response = MpesaAPI.stk_query_status(checkout_request_id)
 
         return JsonResponse(response)
 
