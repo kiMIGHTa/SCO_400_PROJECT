@@ -48,3 +48,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'has_restaurant': self.user.has_restaurant,
         })
         return data
+
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for retrieving and updating user details."""
+    
+    class Meta:
+        model = User
+        exclude = ['password']
+        read_only_fields = ['id', 'email']  # Prevent email from being updated
