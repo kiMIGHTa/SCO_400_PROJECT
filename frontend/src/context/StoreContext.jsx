@@ -1,12 +1,15 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import { getFoodList } from "../apiUtils/food/index"; // API function to fetch food items
 import { getCart, addToCart, updateCartItem, removeFromCart } from "../apiUtils/cart/index"; // API functions for cart
+import {createOrder} from "../apiUtils/order/index"; // API function
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
     const [foodList, setFoodList] = useState([]);
     const [cartItems, setCartItems] = useState({});
+    const [cartId, setCartId] = useState(null); // Store cart ID
+
 
     // Fetch food items from backend
     useEffect(() => {
@@ -28,6 +31,7 @@ const StoreContextProvider = ({ children }) => {
             try {
                 const cartData = await getCart();
                 console.log("Cart Data:", cartData); // Debugging response
+                setCartId(cartData.id);
 
                 // Ensure the cart is mapped correctly
                 const formattedCart = {};
@@ -96,13 +100,48 @@ const StoreContextProvider = ({ children }) => {
         }, 0);
     }, [cartItems, foodList]);  // Dependencies: runs only when cartItems or foodList changes
 
+    // Handle checkout
+    const handleCheckout = async (orderData) => {
+        if (!cartId) {
+            alert("Cart is empty!");
+            return;
+        }
+    
+        try {
+    
+            // Send order details to the backend
+            const response = await createOrder({
+                cart: cartId,
+                total_price: orderData.totalPrice,
+                first_name: orderData.firstName,
+                last_name: orderData.lastName,
+                email: orderData.email,
+                street: orderData.street,
+                region: orderData.region,
+                city: orderData.city,
+                phone_number: Number(orderData.phoneNumber),
+            });
+            console.log("Order:", response.data)
+    
+            if (response && response.data.payment_status==="successful") {
+                alert("Order placed successfully! Approve M-Pesa STK push.");
+                return response.data
+            } else {
+                alert("Order creation failed. Try again.");
+            }
+        } catch (error) {
+            console.log("Error placing order:", error);
+            alert("Error processing order. Try again.");
+        }
+    };
 
     const contextValue = {
         foodList,
         cartItems,
         handleAddToCart,
         handleRemoveFromCart,
-        getTotalCartAmount
+        getTotalCartAmount,
+        handleCheckout
     };
 
     return (
