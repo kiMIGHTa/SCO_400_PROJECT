@@ -121,10 +121,11 @@ const StoreContextProvider = ({ children }) => {
                 city: orderData.city,
                 phone_number: Number(orderData.phoneNumber),
             });
+            alert("A payment prompt will be sent to your mobile phone!")
             console.log("Order:", response.data)
     
             if (response && response.data.payment_status==="successful") {
-                alert("Order placed successfully! Approve M-Pesa STK push.");
+                alert("Payment has been made! Order placed successfully!");
                 return response.data
             } else {
                 alert("Order creation failed. Try again.");
