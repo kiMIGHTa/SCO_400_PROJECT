@@ -11,7 +11,7 @@ from food.models import Food
 # Sample Kenyan dishes
 KENYAN_DISHES = [
     {"name": "Ugali Nyama", "category": "Main Course", "description": "Ugali served with beef stew", "price": 250},
-    {"name": "Chapo Beans", "category": "Main Course", "description": "Chapati with fried beans", "price": 200},
+    {"name": "Chapo Beans", "category": "Main Course", "description": "Chapati with fried beans", "price": 2},
     {"name": "Mukimo", "category": "Main Course", "description": "Mashed potatoes, maize, and greens", "price": 300},
     {"name": "Githeri", "category": "Main Course", "description": "Boiled maize and beans", "price": 180},
     {"name": "Pilau", "category": "Main Course", "description": "Spiced rice with beef", "price": 350},
