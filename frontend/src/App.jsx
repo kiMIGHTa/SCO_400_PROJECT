@@ -11,6 +11,7 @@ import Footer from './components/Footer/Footer.jsx'
 import LoginPopUp from './components/LoginPopUp/LoginPopUp.jsx'
 import Restaurant from './pages/Restaurant/restaurant'
 import RestaurantMenu from './pages/RestaurantMenu/RestaurantMenu'
+import OrderStatus from './pages/OrderStatus/OrderStatus'
 
 function App() {
 
@@ -37,11 +38,11 @@ function App() {
           <Route path='/placeOrder' element={<PlaceOrder />} />
           <Route path="/restaurants" element={<Restaurant />} />
           <Route path="/restaurants/:restaurantId" element={<RestaurantMenu />} />
+          <Route path="/orderStatus/:orderId" element={<OrderStatus />} />
         </Routes>
       </div>
       <Footer />
     </>
-
   )
 }
 
