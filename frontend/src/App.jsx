@@ -12,6 +12,7 @@ import LoginPopUp from './components/LoginPopUp/LoginPopUp.jsx'
 import Restaurant from './pages/Restaurant/restaurant'
 import RestaurantMenu from './pages/RestaurantMenu/RestaurantMenu'
 import OrderStatus from './pages/OrderStatus/OrderStatus'
+import Profile from './pages/Profile/Profile'
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
         <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/placeOrder' element={<PlaceOrder />} />
           <Route path="/restaurants" element={<Restaurant />} />
