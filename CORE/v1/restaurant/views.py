@@ -1,3 +1,4 @@
+#v1.restaurant.views.py
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
@@ -66,15 +67,15 @@ class RestaurantStaffListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """Restrict staff list to the restaurant owned by the user."""
-        return RestaurantStaff.objects.filter(restaurant__owner=self.request.user)
+        restaurant_id = self.kwargs.get("restaurant_id")
+        return RestaurantStaff.objects.filter(restaurant__id=restaurant_id)
 
     def perform_create(self, serializer):
         """Ensure only the restaurant owner can add staff."""
-        restaurant = get_object_or_404(
-            Restaurant, id=self.request.data.get("restaurant"))
+        restaurant = get_object_or_404(Restaurant, id=self.kwargs.get("restaurant_id"))
         if restaurant.owner != self.request.user:
             return Response({"error": "Only the restaurant owner can add staff."}, status=403)
-        serializer.save()
+        serializer.save(restaurant=restaurant)
 
 
 class RestaurantStaffDetailView(generics.RetrieveUpdateDestroyAPIView):

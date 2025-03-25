@@ -1,3 +1,4 @@
+# v1/auth/urls.py
 from django.urls import path
 from v1.auth.views import CreateUserView, CustomTokenObtainPairView, LogoutView, ProfileView
 from rest_framework_simplejwt.views import TokenRefreshView

@@ -1,3 +1,4 @@
+# v1/auth/views.py
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
@@ -31,6 +32,8 @@ class CreateUserView(APIView):
     permission_classes = [AllowAny]  # Allow anyone to create an account
 
     def post(self, request):
+        print("Received Data:", request.data)  # Debugging step
+
         serializer = CustomUserCreateSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -68,7 +71,7 @@ class ProfileView(APIView):
     def get(self, request):
         """Retrieve the authenticated user's profile data."""
         user = request.user
-        serializer = UserSerializer(user)
+        serializer = UserSerializer(user, context={'request': request})  # Pass context
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request):
