@@ -1,0 +1,89 @@
+.restaurant-form {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-form h2 {
+  font-size: 20px;
+  color: #49557e;
+  margin-bottom: 20px;
+}
+
+.restaurant-form .form-group {
+  margin-bottom: 15px;
+}
+
+.restaurant-form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #49557e;
+}
+
+.restaurant-form .form-group input,
+.restaurant-form .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #747474;
+}
+
+.restaurant-form .form-group input[type="file"] {
+  padding: 5px;
+}
+
+.restaurant-form .form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.restaurant-form .form-actions button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.restaurant-form .form-actions button[type="submit"] {
+  background-color: #FF5A36; /* Red-orange */
+  color: white;
+}
+
+.restaurant-form .form-actions button[type="button"] {
+  background-color: white;
+  color: #49557e;
+  border: 1px solid #ddd;
+}
+
+.restaurant-form .form-actions button[type="submit"]:hover {
+  background-color: #E04B2A; /* Darker red-orange */
+}
+
+.restaurant-form .form-actions button[type="button"]:hover {
+  background-color: #f5f5f5;
+}
+
+/* Restaurant Details - Update button colors */
+.restaurant-details button {
+  background-color: #FF5A36; /* Red-orange */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+  transition: all 0.3s;
+}
+
+.restaurant-details button:hover {
+  background-color: #E04B2A; /* Darker red-orange */
+}

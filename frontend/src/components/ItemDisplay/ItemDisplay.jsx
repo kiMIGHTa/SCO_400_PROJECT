@@ -31,6 +31,7 @@ const ItemDisplay = ({ category }) => {
               description={item.description}
               price={item.price}
               image={item.image}
+              restaurantName={item.restaurant.name}
             />
           ))}
       </div>
