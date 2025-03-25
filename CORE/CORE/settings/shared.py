@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-&r6eebgukc7az&*gsb4bl1wg357-1921r$bulo9xw5v_l%y'
 ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite default port
+    "http://localhost:5173","http://localhost:5174",  # Vite default port
 ]
 
 CORS_ALLOW_CREDENTIALS = True  # Allow cookies for authentication

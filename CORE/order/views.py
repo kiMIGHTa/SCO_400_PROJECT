@@ -7,6 +7,7 @@ from .serializers import OrderSerializer
 
 # Create your views here.
 
+
 class RestaurantOrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -19,21 +20,25 @@ class RestaurantOrderViewSet(viewsets.ModelViewSet):
     def update_status(self, request, pk=None):
         order = self.get_object()
         new_status = request.data.get('status')
-        
+
         if not new_status:
             return Response(
-                {'error': 'Status is required'}, 
+                {'error': 'Status is required'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-            
+
         if new_status not in dict(Order.STATUS_CHOICES):
             return Response(
-                {'error': 'Invalid status'}, 
+                {'error': 'Invalid status'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-            
-        order.status = new_status
-        order.save()
-        
+
+        # If status is being changed to delivered, call complete_order
+        if new_status == "delivered":
+            order.complete_order()
+        else:
+            order.status = new_status
+            order.save()
+
         serializer = self.get_serializer(order)
         return Response(serializer.data)
