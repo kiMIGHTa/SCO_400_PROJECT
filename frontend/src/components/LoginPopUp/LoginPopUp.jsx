@@ -1,3 +1,4 @@
+//LoginPopUp.jsx
 import React, { useState } from 'react'
 import './LoginPopUp.css'
 import { assets } from '../../../downloads/assets/frontend_assets/assets'
@@ -41,10 +42,18 @@ const LoginPopUp = ({ setShowLogin }) => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await accountApis.register(credentials);
-      console.log("Registration Successful:", response);
-      toast.success("Account created! Please log in.");
-      setCurrState("Login"); // Switch to login view
+      const formattedData = {
+        first_name: credentials.firstName,  // Convert camelCase to snake_case
+        last_name: credentials.lastName,
+        contact: credentials.contact,
+        email: credentials.email,
+        password: credentials.password
+    };
+
+    const response = await accountApis.register(formattedData);
+    console.log("Registration Successful:", response);
+    toast.success("Account created! Please log in.");
+    setCurrState("Login"); // Switch to login view
     } catch (error) {
       toast.error(error || "Registration failed. Please try again.");
     }
@@ -71,7 +80,7 @@ const LoginPopUp = ({ setShowLogin }) => {
               <input type="text" placeholder='Last Name' required
                 value={credentials.lastName}
                 onChange={(e) => setCredentials({ ...credentials, lastName: e.target.value })} />
-              <input type="text" placeholder='Contact' required
+              <input type="text" placeholder='Contact (254xxxxxxxxx)' required
                 value={credentials.contact}
                 onChange={(e) => setCredentials({ ...credentials, contact: e.target.value })} />
             </>}

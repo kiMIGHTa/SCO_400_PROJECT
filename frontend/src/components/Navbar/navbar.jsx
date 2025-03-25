@@ -5,10 +5,13 @@ import { Link } from 'react-router-dom'
 import { StoreContext } from '../../context/StoreContext'
 import { FiMenu, FiX } from "react-icons/fi"; // Import icons
 import accountApis from '@/apiUtils/account'
+import {useNavigate} from 'react-router-dom'
 
 
 
 const Navbar = ({ setShowLogin }) => {
+  const navigate = useNavigate();
+
 
   const [navSelect, setNavSelect] = useState("home")
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);

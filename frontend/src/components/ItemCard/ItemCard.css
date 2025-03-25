@@ -31,7 +31,7 @@
     width: 70px;
 }
 
-.item-card-descriptrion{
+.item-card-description{
     color: #747474;
     font-size: 12px;
 }
@@ -47,7 +47,7 @@
     position: relative;
 }
 
-.item-image-container .add-button{
+.item-image-container .add{
     width: 35px;
     position: absolute;
     bottom: 15px;
@@ -71,4 +71,38 @@
 .item-counter img{
     width: 30px;
     cursor: pointer;
+}
+
+.item-card-restaurant {
+    color: #49557e;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 8px 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.item-card-restaurant:hover {
+    color: #FF5A36; /* Your red-orange accent color */
+    text-decoration: underline;
+}
+
+/* Restaurant icon that changes color on hover */
+.item-card-restaurant::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2349557e"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: all 0.3s ease;
+}
+
+.item-card-restaurant:hover::before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FF5A36"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>');
 }

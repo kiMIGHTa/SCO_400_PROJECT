@@ -1,4 +1,5 @@
-import { anonAxiosInstance } from "../api";
+//apiUtils/account/index.js
+import { anonAxiosInstance, axiosInstance } from "../api";
 
 class AccountApis {
   async login(data) {
@@ -68,6 +69,38 @@ class AccountApis {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     window.location.href = "/";
+  }
+  async fetchProfile() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axiosInstance.get("/auth/profile/");        
+        resolve(response.data);
+      } catch (error) {
+        reject(error.response?.data || error.message);
+      }
+    });
+  }
+
+  async updateProfile(data) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axiosInstance.patch("/auth/profile/", data);
+        resolve(response.data);
+      } catch (error) {
+        reject(error.response?.data || error.message);
+      }
+    });
+  }
+
+  async deleteProfile() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axiosInstance.delete("/auth/profile/");
+        resolve(response.data);
+      } catch (error) {
+        reject(error.response?.data || error.message);
+      }
+    });
   }
 }
 
