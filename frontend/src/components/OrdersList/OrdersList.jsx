@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getRestaurantOrders, updateOrderStatus } from '../../apiUtils/order';
 import './OrdersList.css';
 
 const OrdersList = () => {
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,46 +15,34 @@ const OrdersList = () => {
 
     const fetchOrders = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('/api/v1/orders/restaurant/', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch orders');
-            }
-
-            const data = await response.json();
-            setOrders(data);
+            const data = await getRestaurantOrders();
+            console.log('Fetched orders:', data); // Debug log
+            setOrders(data || []); // Ensure we always have an array
         } catch (err) {
-            setError(err.message);
+            console.error('Error fetching orders:', err); // Debug log
+            if (err.response && err.response.status === 403) {
+                setError("You don't have permission to view these orders.");
+                navigate('/profile');
+                return;
+            }
+            setError(err.message || 'Failed to fetch orders');
         } finally {
             setLoading(false);
         }
     };
 
-    const updateOrderStatus = async (orderId, newStatus) => {
+    const handleStatusUpdate = async (orderId, newStatus) => {
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`/api/v1/orders/${orderId}/update-status/`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ status: newStatus }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update order status');
-            }
-
+            await updateOrderStatus(orderId, newStatus);
             // Refresh orders after successful update
             fetchOrders();
         } catch (err) {
-            setError(err.message);
+            console.error('Error updating status:', err); // Debug log
+            if (err.response && err.response.status === 403) {
+                setError("You don't have permission to update this order.");
+                return;
+            }
+            setError(err.message || 'Failed to update order status');
         }
     };
 
@@ -66,54 +57,61 @@ const OrdersList = () => {
     return (
         <div className="orders-list">
             <div className="orders-header">
-                <h2>Orders Management</h2>
+                <h2>Restaurant Orders</h2>
             </div>
 
             <div className="orders-grid">
-                {orders.map((order) => (
-                    <div key={order.id} className="order-card">
-                        <div className="order-header">
-                            <h3>Order #{order.id}</h3>
-                            <span className={`status-badge ${order.status}`}>
-                                {order.status}
-                            </span>
-                        </div>
+                {!orders || orders.length === 0 ? (
+                    <div className="no-orders">No orders found.</div>
+                ) : (
+                    orders.map((order) => (
+                        <div key={order.id} className="order-card">
+                            <div className="order-header">
+                                <h3>Order #{order.id}</h3>
+                                <span className={`status-badge ${order.status}`}>
+                                    {order.status}
+                                </span>
+                            </div>
 
-                        <div className="order-details">
-                            <p><strong>Customer:</strong> {order.first_name} {order.last_name}</p>
-                            <p><strong>Email:</strong> {order.email}</p>
-                            <p><strong>Phone:</strong> {order.phone_number}</p>
-                            <p><strong>Address:</strong> {order.street}, {order.city}, {order.region}</p>
-                            <p><strong>Total:</strong> ${order.total_price}</p>
-                        </div>
+                            <div className="order-details">
+                                <p><strong>Customer:</strong> {order.first_name} {order.last_name}</p>
+                                <p><strong>Email:</strong> {order.email}</p>
+                                <p><strong>Phone:</strong> {order.phone_number}</p>
+                                <p><strong>Address:</strong> {order.street}, {order.city}, {order.region}</p>
+                                <p><strong>Total:</strong> Ksh {order.total_price}</p>
+                            </div>
 
-                        <div className="order-items">
-                            <h4>Order Items:</h4>
-                            <ul>
-                                {order.cart.items.map((item) => (
-                                    <li key={item.id}>
-                                        {item.quantity}x {item.food.name} - ${item.food.price * item.quantity}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                            <div className="order-items">
+                                <h4>Order Items:</h4>
+                                <ul>
+                                    {order.cart && order.cart.items && order.cart.items.map((item) => (
+                                        <li key={item.id}>
+                                            {item.quantity}x {item?.food?.name || 'Unknown Item'} - Ksh {(item?.food?.price || 0) * (item.quantity || 0)}
+                                        </li>
+                                    ))}
+                                    {(!order.cart || !order.cart.items || order.cart.items.length === 0) && (
+                                        <li>No items found</li>
+                                    )}
+                                </ul>
+                            </div>
 
-                        <div className="order-actions">
-                            <select
-                                className="status-select"
-                                value={order.status}
-                                onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                            >
-                                <option value="paid-pending">Paid & Pending</option>
-                                <option value="processing">Processing</option>
-                                <option value="awaiting-pickup">Awaiting Pickup</option>
-                                <option value="out-for-delivery">Out for Delivery</option>
-                                <option value="delivered">Delivered</option>
-                                <option value="cancelled">Cancelled</option>
-                            </select>
+                            <div className="order-actions">
+                                <select
+                                    className="status-select"
+                                    value={order.status}
+                                    onChange={(e) => handleStatusUpdate(order.id, e.target.value)}
+                                >
+                                    <option value="paid-pending">Paid & Pending</option>
+                                    <option value="processing">Processing</option>
+                                    <option value="awaiting-pickup">Awaiting Pickup</option>
+                                    <option value="out-for-delivery">Out for Delivery</option>
+                                    <option value="delivered">Delivered</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
         </div>
     );

@@ -27,3 +27,20 @@ export const completeOrder = async (orderId) => {
   const response = await axiosInstance.patch(`/order/${orderId}/complete/`);
   return response.data;
 };
+
+// Get all orders for a restaurant
+export const getRestaurantOrders = async () => {
+  const response = await axiosInstance.get("/order/restaurant/");
+  return response.data;
+};
+
+// Update order status
+export const updateOrderStatus = async (orderId, status) => {
+  const response = await axiosInstance.patch(
+    `/order/restaurant/${orderId}/update-status/`,
+    {
+      status: status,
+    }
+  );
+  return response.data;
+};
