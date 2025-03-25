@@ -1,7 +1,7 @@
-
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from order.models import Order
 from cart.models import Cart
@@ -157,3 +157,38 @@ class CompleteOrderView(generics.UpdateAPIView):
             return Response({"error": "Order is already completed."}, status=status.HTTP_400_BAD_REQUEST)
         order.complete_order()
         return Response({"message": "Order marked as delivered."})
+
+
+class RestaurantOrderViewSet(viewsets.ModelViewSet):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Get orders for the restaurant owned by the current user
+        # We need to filter through CartItem -> Food -> Restaurant
+        return Order.objects.filter(
+            cart__items__food_item__restaurant__owner=self.request.user
+        ).distinct()
+
+    @action(detail=True, methods=['patch'])
+    def update_status(self, request, pk=None):
+        order = self.get_object()
+        new_status = request.data.get('status')
+
+        if not new_status:
+            return Response(
+                {'error': 'Status is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if new_status not in dict(Order.STATUS_CHOICES):
+            return Response(
+                {'error': 'Invalid status'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        order.status = new_status
+        order.save()
+
+        serializer = self.get_serializer(order)
+        return Response(serializer.data)
