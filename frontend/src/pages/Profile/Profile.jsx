@@ -83,7 +83,11 @@ const Profile = () => {
   };
 
   const handleViewOrders = () => {
-    navigate('/restaurant-orders');
+    if (user.has_restaurant) {
+      navigate('/restaurant-orders');
+    } else {
+      setError("Restaurant information not available.");
+    }
   };
 
   return (
