@@ -196,8 +196,12 @@ class RestaurantOrderViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        order.status = new_status
-        order.save()
+        # If status is being changed to delivered, call complete_order
+        if new_status == "delivered":
+            order.complete_order()
+        else:
+            order.status = new_status
+            order.save()
 
         serializer = self.get_serializer(order)
         return Response(serializer.data)

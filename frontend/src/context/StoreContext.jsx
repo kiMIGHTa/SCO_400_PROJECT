@@ -1,13 +1,14 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import { getFoodList } from "../apiUtils/food/index"; // API function to fetch food items
 import { getCart, addToCart, updateCartItem, removeFromCart } from "../apiUtils/cart/index"; // API functions for cart
-import {createOrder} from "../apiUtils/order/index"; // API function
+import { createOrder } from "../apiUtils/order/index"; // API function
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = ({ children }) => {
     const [foodList, setFoodList] = useState([]);
     const [cartItems, setCartItems] = useState({});
+    const [cartItemIds, setCartItemIds] = useState({}); // Track cart item IDs
     const [cartId, setCartId] = useState(null); // Store cart ID
 
 
@@ -33,22 +34,25 @@ const StoreContextProvider = ({ children }) => {
                 console.log("Cart Data:", cartData); // Debugging response
                 setCartId(cartData.id);
 
-                // Ensure the cart is mapped correctly
+                // Map both quantities and cart item IDs
                 const formattedCart = {};
+                const formattedCartItemIds = {};
                 cartData.items.forEach(item => {
                     if (item.food_item && item.food_item.id) {
                         formattedCart[item.food_item.id] = item.quantity;
+                        formattedCartItemIds[item.food_item.id] = item.id;
                     }
                 });
 
                 setCartItems(formattedCart);
+                setCartItemIds(formattedCartItemIds);
             } catch (error) {
                 console.error("Error fetching cart:", error);
             }
         };
 
         fetchCart();
-    }, []);
+    }, [cartId]);
 
 
     // Add item to cart
@@ -58,12 +62,13 @@ const StoreContextProvider = ({ children }) => {
             const newQty = currentQty + 1;
 
             if (currentQty === 0) {
-                await addToCart(itemId, 1);
+                const response = await addToCart(itemId, 1);
+                setCartItemIds(prev => ({ ...prev, [itemId]: response.id }));
             } else {
-                await updateCartItem(itemId, newQty);
+                await updateCartItem(cartItemIds[itemId], newQty);
             }
 
-            setCartItems((prev) => ({ ...prev, [itemId]: newQty }))
+            setCartItems((prev) => ({ ...prev, [itemId]: newQty }));
         } catch (error) {
             console.error("Error adding to cart:", error);
         }
@@ -76,16 +81,20 @@ const StoreContextProvider = ({ children }) => {
             if (!currentQty) return;
 
             if (currentQty === 1) {
-                await removeFromCart(itemId);
+                await removeFromCart(cartItemIds[itemId]);
                 setCartItems((prev) => {
                     const updatedCart = { ...prev };
                     delete updatedCart[itemId];
                     return updatedCart;
                 });
+                setCartItemIds((prev) => {
+                    const updatedIds = { ...prev };
+                    delete updatedIds[itemId];
+                    return updatedIds;
+                });
             } else {
-                await updateCartItem(itemId, currentQty - 1);
+                await updateCartItem(cartItemIds[itemId], currentQty - 1);
                 setCartItems((prev) => ({ ...prev, [itemId]: currentQty - 1 }));
-                console.log(cartItems)
             }
         } catch (error) {
             console.error("Error removing from cart:", error);
@@ -106,9 +115,9 @@ const StoreContextProvider = ({ children }) => {
             alert("Cart is empty!");
             return;
         }
-    
+
         try {
-    
+
             // Send order details to the backend
             const response = await createOrder({
                 cart: cartId,
@@ -123,8 +132,8 @@ const StoreContextProvider = ({ children }) => {
             });
             alert("A payment prompt will be sent to your mobile phone!")
             console.log("Order:", response.data)
-    
-            if (response && response.data.payment_status==="successful") {
+
+            if (response && response.data.payment_status === "successful") {
                 alert("Payment has been made! Order placed successfully!");
                 return response.data
             } else {
