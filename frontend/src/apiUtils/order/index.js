@@ -37,7 +37,7 @@ export const getRestaurantOrders = async () => {
 // Update order status
 export const updateOrderStatus = async (orderId, status) => {
   const response = await axiosInstance.patch(
-    `/order/restaurant/${orderId}/update-status/`,
+    `/order/restaurant/${orderId}/update_status/`,
     {
       status: status,
     }
