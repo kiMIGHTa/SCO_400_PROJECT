@@ -65,7 +65,8 @@ class CreateOrderView(generics.CreateAPIView):
             street=street,
             region=region,
             city=city,
-            status="paid-pending"
+            status="paid-pending",
+            restaurant=cart.items.first().food_item.restaurant.owner  # Set the restaurant owner
         )
         print(f"Order created: {order}")
 
@@ -173,11 +174,10 @@ class RestaurantOrderViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Get orders for the restaurant owned by the current user
-        # We need to filter through CartItem -> Food -> Restaurant
+        # Directly filter by the restaurant owner (current user)
         return Order.objects.filter(
-            cart__items__food_item__restaurant__owner=self.request.user
-        ).distinct()
+            restaurant=self.request.user
+        ).order_by('-created_at')
 
     @action(detail=True, methods=['patch'])
     def update_status(self, request, pk=None):

@@ -33,6 +33,13 @@ class Order(models.Model):
     cart = models.ForeignKey(
         Cart, on_delete=models.SET_NULL, null=True, blank=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    restaurant = models.ForeignKey(
+        User,  # Links to the restaurant owner (User model)
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="restaurant_orders"
+    )
 
     # New fields with default values
     first_name = models.CharField(max_length=100, default="N/A")
