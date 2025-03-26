@@ -150,16 +150,16 @@ const OrdersList = () => {
 
             <div className="orders-grid">
                 {activeTab === 'current' ? (
-                    currentOrders.length === 0 ? (
-                        <div className="no-orders">No current orders found.</div>
-                    ) : (
+                    currentOrders.length > 0 ? (
                         currentOrders.map(renderOrderCard)
+                    ) : (
+                        <p>No current orders</p>
                     )
                 ) : (
-                    pastOrders.length === 0 ? (
-                        <div className="no-orders">No past orders found.</div>
-                    ) : (
+                    pastOrders.length > 0 ? (
                         pastOrders.map(renderOrderCard)
+                    ) : (
+                        <p>No past orders</p>
                     )
                 )}
             </div>
