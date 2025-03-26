@@ -16,11 +16,19 @@ const OrdersList = () => {
 
     const fetchOrders = async () => {
         try {
+            console.log('Fetching orders...'); // Debug log
             const data = await getRestaurantOrders();
-            console.log('Fetched orders:', data); // Debug log
-            setOrders(data || []); // Ensure we always have an array
+            console.log('Raw API response:', data); // Debug log
+            if (!data) {
+                console.log('No data received from API'); // Debug log
+            }
+            setOrders(data || []);
         } catch (err) {
-            console.error('Error fetching orders:', err); // Debug log
+            console.error('Error details:', {
+                message: err.message,
+                response: err.response?.data,
+                status: err.response?.status
+            }); // Detailed error log
             if (err.response && err.response.status === 403) {
                 setError("You don't have permission to view these orders.");
                 navigate('/profile');
@@ -55,9 +63,14 @@ const OrdersList = () => {
         ['delivered', 'cancelled'].includes(order.status)
     );
 
+    console.log('Current orders:', currentOrders); // Debug log
+    console.log('Past orders:', pastOrders); // Debug log
+
     const renderOrderItems = (order) => {
+        console.log('Rendering items for order:', order); // Debug log
         // For active orders, use cart items
         if (['paid-pending', 'processing', 'awaiting-pickup', 'out-for-delivery'].includes(order.status)) {
+            console.log('Using cart items:', order.cart_items); // Debug log
             return order.cart_items?.map((item) => (
                 <li key={item.id}>
                     {item.quantity}x {item.food_item.name} - Ksh {item.food_item.price * item.quantity}
@@ -65,6 +78,7 @@ const OrdersList = () => {
             )) || [];
         }
         // For completed orders, use order items
+        console.log('Using order items:', order.items); // Debug log
         return order.items?.map((item) => (
             <li key={item.id}>
                 {item.quantity}x {item.food_item.name} - Ksh {item.price * item.quantity}
@@ -93,11 +107,7 @@ const OrdersList = () => {
             <div className="order-items">
                 <h4>Order Items:</h4>
                 <ul>
-                    {renderOrderItems(order).length > 0 ? (
-                        renderOrderItems(order)
-                    ) : (
-                        <li>No items found</li>
-                    )}
+                    {renderOrderItems(order)}
                 </ul>
             </div>
 
