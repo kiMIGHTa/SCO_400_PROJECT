@@ -11,6 +11,15 @@ from v1.payment.mpesa import MpesaAPI
 import time
 
 
+class OrderListView(generics.ListAPIView):
+    """List all orders for the current user"""
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).order_by('-created_at')
+
+
 class CreateOrderView(generics.CreateAPIView):
     """Create an order and initiate M-Pesa STK push"""
     serializer_class = OrderSerializer

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CreateOrderView, OrderDetailView, CompleteOrderView, RestaurantOrderViewSet
+from .views import CreateOrderView, OrderDetailView, CompleteOrderView, RestaurantOrderViewSet, OrderListView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -7,7 +7,7 @@ router.register(r'restaurant', RestaurantOrderViewSet,
                 basename='restaurant-orders')
 
 urlpatterns = [
-    # path("", OrderListView.as_view(), name="order-list"),  # GET all orders
+    path("", OrderListView.as_view(), name="order-list"),  # GET all orders
     path("create/", CreateOrderView.as_view(),
          name="order-create"),  # POST create order
     path("<int:order_id>/", OrderDetailView.as_view(),
