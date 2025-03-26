@@ -6,33 +6,19 @@ import { getOrderDetails, completeOrder } from '@/apiUtils/order';
 import './OrderStatus.css';
 
 const OrderStatus = () => {
-  const { orderId } = useParams();
+  const { orderId } = useParams(); // Get order ID from URL
   const navigate = useNavigate();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     const fetchOrderStatus = async () => {
       try {
         const orderData = await getOrderDetails(orderId);
-        if (!orderData) {
-          setError('Order not found. Please check your order ID and try again.');
-          return;
-        }
+        console.log(orderData);
         setOrder(orderData);
       } catch (err) {
-        if (err.response?.status === 401) {
-          setError('Please log in to view your order status.');
-          setTimeout(() => navigate('/login'), 2000);
-          return;
-        }
-        if (err.response?.status === 403) {
-          setError('You do not have permission to view this order.');
-          setTimeout(() => navigate('/'), 2000);
-          return;
-        }
         setError('Failed to fetch order details. Please try again.');
       } finally {
         setLoading(false);
@@ -40,34 +26,26 @@ const OrderStatus = () => {
     };
 
     fetchOrderStatus();
-  }, [orderId, navigate]);
+  }, [orderId]);
+
+  const handleConfirmDelivery = async () => {
+    try {
+      await completeOrder(orderId);
+      // Refresh order details after confirming delivery
+      const updatedOrder = await getOrderDetails(orderId);
+      setOrder(updatedOrder);
+    } catch (err) {
+      setError('Failed to confirm delivery. Please try again.');
+    }
+  };
 
   const handleGoHome = () => {
     navigate('/');
   };
 
-  const handleConfirmDelivery = async () => {
-    if (!window.confirm('Are you sure you have received your order?')) {
-      return;
-    }
-
-    setConfirming(true);
-    try {
-      await completeOrder(orderId);
-      // Refresh order details
-      const updatedOrder = await getOrderDetails(orderId);
-      setOrder(updatedOrder);
-      alert('Delivery confirmed! Thank you for your order.');
-    } catch (err) {
-      setError('Failed to confirm delivery. Please try again.');
-    } finally {
-      setConfirming(false);
-    }
-  };
-
-  if (loading) return <div className="loading">Loading order details...</div>;
-  if (error) return <div className="error">{error}</div>;
-  if (!order) return <div className="error">No order found.</div>;
+  if (loading) return <p>Loading order details...</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!order) return <p>No order found.</p>;
 
   return (
     <div className="order-status">
@@ -81,34 +59,41 @@ const OrderStatus = () => {
         </div>
 
         <div className="order-details">
-          <p><strong>Total Price:</strong> Ksh {order.total_price}</p>
-          <p><strong>Delivery Address:</strong> {order.street}, {order.city}, {order.region}</p>
+          <p><strong>Customer:</strong> {order.first_name} {order.last_name}</p>
+          <p><strong>Email:</strong> {order.email}</p>
           <p><strong>Phone:</strong> {order.phone_number}</p>
+          <p><strong>Address:</strong> {order.street}, {order.city}, {order.region}</p>
+          <p><strong>Total:</strong> Ksh {order.total_price}</p>
         </div>
 
         <div className="order-items">
-          <h4>Order Items</h4>
+          <h4>Order Items:</h4>
           <ul>
-            {order.cart && order.cart.items && order.cart.items.map((item) => (
+            {order.cart_items && order.cart_items.map((item) => (
               <li key={item.id}>
-                {item.quantity}x {item?.food?.name || 'Unknown Item'} - Ksh {(item?.food?.price || 0) * (item.quantity || 0)}
+                {item.quantity}x {item.food_item.name} - Ksh {item.food_item.price * item.quantity}
               </li>
             ))}
+            {(!order.cart_items || order.cart_items.length === 0) && (
+              <li>No items found</li>
+            )}
           </ul>
         </div>
 
         <div className="order-actions">
-          {order.status === 'out-for-delivery' && (
+          {order.status !== 'delivered' && (
             <button
+              className="confirm-delivery-btn"
               onClick={handleConfirmDelivery}
-              className="confirm-delivery-button"
-              disabled={confirming}
             >
-              {confirming ? 'Confirming...' : 'Confirm Delivery'}
+              Confirm Delivery
             </button>
           )}
-          <button onClick={handleGoHome} className="home-button">
-            Go to Homepage
+          <button
+            className="go-home-btn"
+            onClick={handleGoHome}
+          >
+            Go to Home
           </button>
         </div>
       </div>

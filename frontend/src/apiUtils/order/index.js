@@ -18,7 +18,6 @@ export const createOrder = async (orderDetails) => {
 export const getOrderDetails = async (orderId) => {
   const response = await axiosInstance.get(`/order/${orderId}/`);
   console.log(response.data);
-
   return response.data;
 };
 
