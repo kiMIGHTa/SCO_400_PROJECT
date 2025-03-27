@@ -115,6 +115,7 @@ const StoreContextProvider = ({ children }) => {
             alert("Cart is empty!");
             return;
         }
+        alert("A payment prompt will be sent to your mobile phone!")
 
         try {
 
@@ -130,7 +131,6 @@ const StoreContextProvider = ({ children }) => {
                 city: orderData.city,
                 phone_number: Number(orderData.phoneNumber),
             });
-            alert("A payment prompt will be sent to your mobile phone!")
             console.log("Order:", response.data)
 
             if (response && response.data.payment_status === "successful") {
