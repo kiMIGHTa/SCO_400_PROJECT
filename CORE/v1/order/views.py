@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,6 +10,11 @@ from payment.models import Payment
 from .serializers import OrderSerializer
 from v1.payment.mpesa import MpesaAPI
 import time
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
+
 
 
 class OrderListView(generics.ListAPIView):
@@ -29,6 +35,15 @@ class CreateOrderView(generics.CreateAPIView):
         print("CreateOrderView triggered")
 
         cart = get_object_or_404(Cart, user=request.user)
+        restaurant = cart.items.first().food_item.restaurant.owner
+
+        # Verify all items belong to the same restaurant
+        for item in cart.items.all():
+            if item.food_item.restaurant.owner != restaurant:
+                return Response(
+            {"error": "All items must be from the same restaurant"},
+            status=status.HTTP_400_BAD_REQUEST
+            )
 
         if not cart.items.exists():
             print("Cart is empty")
@@ -66,9 +81,10 @@ class CreateOrderView(generics.CreateAPIView):
             region=region,
             city=city,
             status="paid-pending",
-            restaurant=cart.items.first().food_item.restaurant.owner  # Set the restaurant owner
+            restaurant=restaurant # Set the restaurant owner
         )
         print(f"Order created: {order}")
+
 
         # Step 2: Initiate STK Push
         stk_response = MpesaAPI.stk_push_request(
@@ -112,6 +128,9 @@ class CreateOrderView(generics.CreateAPIView):
         if result_code == "0":
             # Successful payment
             payment.confirm_payment(transaction_id=checkout_request_id)
+            
+            # Send email receipt
+            self.send_order_receipt(order)
             print(f"""Payment successful:
                 {{
                     "message": "Payment successful",
@@ -143,6 +162,26 @@ class CreateOrderView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+    def send_order_receipt(self, order):
+        try:
+            # Render both text and HTML versions
+            text_content = f"Order #{order.id}\nTotal: KSh {order.total_price}"
+            html_content = render_to_string(
+                'order/emails/order_receipt.html',
+                {'order': order}
+            )
+            
+            # Send email
+            send_mail(
+                subject=f'Order #{order.id}',
+                message=text_content,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[order.email],
+                html_message=html_content,  # Optional HTML
+                fail_silently=False
+            )
+        except Exception as e:
+            print(f"EMAIL ERROR: {str(e)}")
 
 class OrderDetailView(generics.RetrieveAPIView):
     """Retrieve details of a specific order"""
