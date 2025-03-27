@@ -29,7 +29,7 @@ const Header = () => {
         <h2>Order your food here</h2>
         <p>Choose from a diverse menu chef'd up how you'd like it at home</p>
         <div className="header-buttons">
-          <button onClick={() => navigate('/restaurants')}>View Menu</button>
+          <button onClick={() => navigate('/restaurants')}>View Restaurants</button>
           <button onClick={handleTrackOrder}>Track Order</button>
         </div>
       </div>

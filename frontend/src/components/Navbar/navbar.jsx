@@ -52,12 +52,10 @@ const Navbar = ({ setShowLogin }) => {
       <Link to='/'><img src={assets.logo} alt="logo" className='logo' /></Link>
       <ul className="navbar-list">
         <Link to='/' onClick={() => setNavSelect("home")} className={navSelect === "home" ? "active" : ""}>home</Link>
-        <a href='#explore-page' onClick={() => setNavSelect("menu")} className={navSelect === "menu" ? "active" : ""}>menu</a>
         <Link to='/restaurants' onClick={() => setNavSelect("restaurants")} className={navSelect === "restaurants" ? "active" : ""}>restaurants</Link>
         <a href='#footer' onClick={() => setNavSelect("contact us")} className={navSelect === "contact us" ? "active" : ""}>contact us</a>
       </ul>
       <div className='navbar-right'>
-        <img src={assets.search_icon} alt='Search' />
         <div className='navbar-basket-icon'>
           <Link to='/cart'><img src={assets.basket_icon} alt='Basket' /></Link>
           <div className={getTotalCartAmount() === 0 ? '' : 'dot'}></div>
