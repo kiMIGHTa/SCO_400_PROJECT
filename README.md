@@ -11,7 +11,7 @@
 ### Installation
 ```bash
 # Clone repository
-git clone https://github.com/your-repo/mpishi.git
+git clone git@github.com:kiMIGHTa/SCO_400_PROJECT.git
 
 # Create virtual environment
 python -m venv venv
