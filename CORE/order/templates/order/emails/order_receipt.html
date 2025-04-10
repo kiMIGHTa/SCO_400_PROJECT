@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <h2>Thank you for your order!</h2>
+    <p>Order #{{ order.id }}</p>
+    <p>Date: {{ order.created_at|date:"F j, Y" }}</p>
+    
+    <h3>Order Details:</h3>
+    <ul>
+        {% for item in items %}
+        <li>{{ item.quantity }} × {{ item.food_item.name }} - KSh {{ item.food_item.price }}</li>
+        {% endfor %}
+    </ul>
+    
+    <p><strong>Total: KSh {{ total }}</strong></p>
+    
+    <h3>Delivery Information:</h3>
+    <p>
+        {{ order.first_name }} {{ order.last_name }}<br>
+        {{ order.street }}<br>
+        {{ order.city }}, {{ order.region }}<br>
+        Phone: {{ order.phone_number }}
+    </p>
+    
+    <p>We'll notify you when your order is on its way!</p>
+    
+    <p>Thank you for choosing us!</p>
+</body>
+</html>

@@ -6,9 +6,14 @@ import Navbar from './components/Navbar/navbar.jsx'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/home.jsx'
 import Cart from './pages/Cart/cart.jsx'
-import placeOrder from './pages/PlaceOrder/placeOrder.jsx'
+import PlaceOrder from './pages/PlaceOrder/placeOrder.jsx'
 import Footer from './components/Footer/Footer.jsx'
 import LoginPopUp from './components/LoginPopUp/LoginPopUp.jsx'
+import Restaurant from './pages/Restaurant/restaurant'
+import RestaurantMenu from './pages/RestaurantMenu/RestaurantMenu'
+import OrderStatus from './pages/OrderStatus/OrderStatus'
+import Profile from './pages/Profile/Profile'
+import OrdersList from './components/OrdersList/OrdersList'
 
 function App() {
 
@@ -26,18 +31,22 @@ function App() {
 
   return (
     <>
-    {showLogin?<LoginPopUp setShowLogin={setShowLogin}/>:<></>}
+      {showLogin ? <LoginPopUp setShowLogin={setShowLogin} /> : <></>}
       <div className='app'>
-        <Navbar setShowLogin={setShowLogin}/>
+        <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/profile' element={<Profile />} />
           <Route path='/cart' element={<Cart />} />
-          <Route path='/placeOrder' element={<placeOrder />} />
+          <Route path='/placeOrder' element={<PlaceOrder />} />
+          <Route path="/restaurants" element={<Restaurant />} />
+          <Route path="/restaurants/:restaurantId" element={<RestaurantMenu />} />
+          <Route path="/orderStatus/:orderId" element={<OrderStatus />} />
+          <Route path="/restaurant-orders" element={<OrdersList />} />
         </Routes>
       </div>
       <Footer />
     </>
-
   )
 }
 

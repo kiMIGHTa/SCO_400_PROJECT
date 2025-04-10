@@ -1,0 +1,178 @@
+.orders-list {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.orders-header {
+  margin-bottom: 2rem;
+}
+
+.orders-header h2 {
+  color: #333;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.orders-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.tab-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.order-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.order-card:hover {
+  transform: translateY(-2px);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.order-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.status-badge.paid-pending {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-badge.processing {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-badge.awaiting-pickup {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-badge.out-for-delivery {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.status-badge.delivered {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-badge.cancelled {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.order-details {
+  margin-bottom: 1rem;
+}
+
+.order-details p {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.order-items {
+  margin-top: 1rem;
+}
+
+.order-items h4 {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.order-items ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.order-items li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-items li:last-child {
+  border-bottom: none;
+}
+
+.order-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.status-select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: #1976d2;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  grid-column: 1 / -1;
+}
