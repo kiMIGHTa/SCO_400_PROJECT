@@ -25,6 +25,7 @@ cd mpishi/CORE
 pip install -r requirements.txt
 
 #run server
+python manage.py populate_db
 python manage.py runserver
 
 #install frontend dependencies
